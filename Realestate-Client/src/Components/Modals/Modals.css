@@ -1,0 +1,36 @@
+.modal_styles{
+    position:fixed;
+    margin-top:100%;
+    left:60%;
+    bottom:-49.7%;
+    /* margin-bottom: 50px; */
+    transform:translate(-50%, -50%);
+    background-color:white;
+    padding:10px;
+    z-index:600;
+    height:718px;
+    width:1190px;
+    /* border: 3px solid red; */
+    border: none;
+}
+.column{
+    display: flex;
+    flex-direction: column;
+}
+.butn{
+    margin-top: 0.7%;
+    margin-left: 34%;
+    width: 414px;
+    height: 110px;
+    border-radius: 16.5px;
+    font-size: 60px;
+    font-family: "Candara";
+    font-weight: bold;
+    background-color: rgb(126, 16, 16);
+    color: white;
+    cursor: pointer;
+}
+.butn:hover{
+    background-color: red;
+    color: antiquewhite;
+}
