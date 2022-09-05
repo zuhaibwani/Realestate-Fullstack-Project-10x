@@ -349,3 +349,8 @@
     font-size: 1.3em;
     color: gray;
 }
+
+#filter{
+    display: flex;
+    position: relative;
+}

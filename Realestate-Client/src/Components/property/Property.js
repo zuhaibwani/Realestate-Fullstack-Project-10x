@@ -21,6 +21,7 @@ const Property = ({setHeaderData}) =>{
     const [value,setValue]= useState("");
     const [users,setUsers]= useState([]);
     const [userName_id, setUserName_id] = useState({})
+    const [allData, setAllData] = useState(null)
     const cookies = new Cookies()
     const token = cookies.get('jwt')
     let navigate = useNavigate();
@@ -32,31 +33,72 @@ const Property = ({setHeaderData}) =>{
     },1000);
 
     const onChange=(e)=>{
-        // e.prventDefault();
         const text= e.target.value;
-        // setDataval(text);
-        // console.log(e.target.elements.searchtext.value);
         deb(text);
     }
 
     const onSearch = (searchTerm)=>{
-        // console.log(searchTerm);
         const ppd_arr=searchTerm.split(" ");
-        // console.log(ppd_arr);
         const ppd_id=parseInt(ppd_arr[1]);
 
         let post = users;
-            // console.log(post);
             const result= post.filter((val)=>val._id===ppd_id);
-            // console.log(result)
             setUsers(result);
             if(result.length===0){
                 window.alert(`Oops! ${searchTerm} Not Found.`)
             }
-
-       
     }
 
+
+    const filterData = (e)=>{
+        let filterToApply = e.target.value
+        if(filterToApply==="All"){
+         setUsers(allData)
+         return
+        }
+        if(allData===null){
+          setAllData(users)
+          if(filterToApply === "Unsold"){
+                const result= users.filter((val)=>val.status===filterToApply);
+                setUsers(result);
+                console.log(result)
+            }else{
+                const result= users.filter((val)=>val.property_type===filterToApply)
+                setUsers(result)
+            }
+          
+        }else if(users.length!==allData.length){
+          setUsers(allData)
+          if(filterToApply === "Unsold"){
+            const result= allData.filter((val)=>val.status===filterToApply);
+            setUsers(result);
+            }else{
+                const result= allData.filter((val)=>val.property_type===filterToApply)
+                setUsers(result)
+                // console.log(users)
+            }
+          
+        }else{
+            if(filterToApply === "Unsold"){
+                const result= users.filter((val)=>val.status===filterToApply);
+                setUsers(result);
+                }else{
+                    const result= users.filter((val)=>val.property_type===filterToApply)
+                    setUsers(result)
+                }
+          
+    
+        }
+      }
+
+    //   const clearFilter = ()=>{
+    //     if(allData !==null){
+    //         setUsers(allData)
+    //         setDefault("All")
+    //     }else{
+    //         return
+    //     }
+    //   }
     
     useEffect(()=>{
         const afterLogin = ()=>{
@@ -76,6 +118,7 @@ const Property = ({setHeaderData}) =>{
                     setHeaderData(res.data.userData[0])
                     setUserName_id(res.data.userData[0])
                     setUsers(res.data.property)
+                    console.log(res.data.property)
                 }).catch((err)=>{
                     console.log("Inside catch block of property.js")
                     console.log(err)
@@ -113,7 +156,19 @@ const Property = ({setHeaderData}) =>{
                         </tr>
                     </table>
                 </div>
+                <div id="filter">
+                    <label>Filter</label>
+                    <select onChange={filterData}>
+                    <option>All</option>
+                    <option>Unsold</option>
+                    <option>Land</option>
+                    <option>House</option>
+                    <option>Plot</option>
+                    </select>
+                    {/* <button onClick={clearFilter}>Clear</button> */}
+                </div>
             </div>
+            
             <div className="button_div">
             <Link to="/basicinfo"> <button className="btn_add"><span className="plus">+</span><span className="text_btn">Add Property</span></button>  </Link>        
             </div>
@@ -150,12 +205,6 @@ const Property = ({setHeaderData}) =>{
                 )
             })}
 
-           
-            {/* {[...users].map((user)=>{
-                return(
-                    <div> {user.email} </div>
-                )
-            })} */}
                 
             
         </>
